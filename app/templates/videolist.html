@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>视频下载列表-Bili-download</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../static/css/global.css">
+</head>
+<body>
+<div class="index-page">
+    <div class="main">
+
+        <div class="search-result">
+
+            <div class="video-info">
+                <div id="video-result">
+                    <div class="abc">
+                        {% for item in videolist %}
+                        <a id="itemtitle" href="javascript:void(0);" class="video-name">{{ item.title }}</a>
+                        <input id="item-url" hidden="hidden" type="text" value="{{ item.video_url }}">
+                        <input id="item-page" hidden="hidden" type="text" value="{{ item.page }}">
+                        <input id="item-starturl" hidden="hidden" type="text" value="{{ item.refer_url }}">
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // $("a").on("click", function (event) {
+    //     event.preventDefault(); //使a自带的方法失效
+    //     let video_download_url = $(this).next().val();
+    //     let title = $(this).text();
+    //     let refer_url = $(this).next().next().next().val();
+    //     var data = {
+    //         "title": title,
+    //         "video_download_url": video_download_url,
+    //         "refer_url": refer_url
+    //     }
+    //     $.ajax({
+    //         url: "{{ url_for('download_video') }}",
+    //         type: "post",
+    //         contentType: 'application/json; charset=UTF-8', //指定传递给服务器的是Json格式数据
+    //         data: JSON.stringify(data),
+    //         success: function (result) {
+    //         },
+    //         error: function () {
+    //         }
+    //     });
+    // })
+    $("a").click(function () {
+        var form = $('<form action="/download_video" method="post" target="_self" style="display: none"></form>');
+        var video_download_url = $('<input type="text" name="video_download_url" style="display: none" />');
+        var refer_url = $('<input type="text" name="refer_url"  style="display: none" />');
+        var title = $('<input type="text" name="title"  style="display: none" />');
+
+        title.attr('value', $(this).text());
+        console.log($(this).text());
+        video_download_url.attr('value', $(this).next().val());
+        console.log($(this).next().val())
+        refer_url.attr('value', $(this).next().next().next().val());
+
+        form.append(title);
+        form.append(video_download_url);
+        form.append(refer_url);
+
+        $(document.body).append(form);
+        form.submit();
+
+    });
+</script>
+</body>
+
+
+</html>
